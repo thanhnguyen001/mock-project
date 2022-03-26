@@ -65,7 +65,6 @@ export class ArticleComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   public handleActiveTab(t: string) {
-    if (t === this.tag) return;
     this.tag = t;
     if (t !== 'Your Feeds' && t !== 'Global') this.tagService.tag = t;
     else this.tagService.tag = '';
