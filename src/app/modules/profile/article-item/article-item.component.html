@@ -1,0 +1,29 @@
+<div class="article-info d-flex align-items-center justify-content-between">
+  <div class="article-user d-flex">
+    <div class="article-user-img rounded-circle d-flex align-items-center">
+      <img class="rounded-circle" [src]="article.author.image" alt="" />
+    </div>
+    <div class="article-user-name d-flex flex-column">
+      <span class="username" [routerLink]="handleRoute(article.author.username)" >{{ article.author.username }}</span>
+      <span class="article-date">{{
+        article.updatedAt | date: "longDate"
+      }}</span>
+    </div>
+  </div>
+  <div class="article-action" (click)="handleActionLike()">
+    <i class="fa-solid fa-heart" [class.liked]="isLiked"></i>
+    <span style="margin-left: 2px;">{{ article.favoritesCount }}</span>
+  </div>
+</div>
+<div class="article-content mt-3">
+  <div class="article-title">{{ article.title }}</div>
+  <div class="article-description">{{ article.description }}</div>
+</div>
+<div class="read-more d-flex align-items-center justify-content-between">
+  <div class="read-more-text" [routerLink]="['/editor/article/', article.slug]">Read more...</div>
+  <ul class="tags d-flex flex-row">
+    <li class="tags-item" *ngFor="let tag of article.tagList">
+      {{ tag }}
+    </li>
+  </ul>
+</div>
