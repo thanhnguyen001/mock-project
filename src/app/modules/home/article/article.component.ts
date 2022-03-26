@@ -71,7 +71,6 @@ export class ArticleComponent implements OnInit, OnDestroy, DoCheck {
     this.isPending = true;
     if (this.tag === 'Global') {
       this.getArticleGlobal();
-      this.router.navigate(['/home']);
     } else if (this.tag === 'Your Feeds') this.getArticleFeeds();
     else this.getArticleByTag();
   }
@@ -83,6 +82,7 @@ export class ArticleComponent implements OnInit, OnDestroy, DoCheck {
     } = {};
     if (t && t.length > 0) body.tag = t.replace('#', '');
     if (this.offset) body.offset = this.offset;
+
     this.isPending = true;
     this.subscription.add(
       this.apiClient.getListArticles(body).subscribe((res) => {

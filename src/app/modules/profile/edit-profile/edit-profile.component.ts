@@ -115,7 +115,8 @@ export class EditProfileComponent implements OnInit, DoCheck, OnDestroy {
       this.apiClient.updateUser(body).subscribe({
         next: (res: { user: User }) => {
           // this.updateProfile.reset();
-          this.route.navigate(['/profile']);
+          const url: string = `/profile/@${this.user.username}`
+          this.route.navigate([url]);
         },
         error: (err) => {
           if (err.error.includes('username')) {

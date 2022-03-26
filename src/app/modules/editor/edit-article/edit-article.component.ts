@@ -1,3 +1,4 @@
+import { DialogService } from './../../../services/dialog.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ApiClientService } from 'src/app/services/api-client.service';
@@ -19,36 +20,24 @@ export class EditArticleComponent implements OnInit {
     public fb: FormBuilder,
     public apiService: ApiClientService,
     public route: Router,
-    public userService: UserService
+    public userService: UserService,
+    public dialogService: DialogService
   ) {}
 
   ngOnInit() {
-    // this.apiService.getUser().pipe(
-    //   switchMap(res => {
-    //     return this.apiService.getListArticles({author: res.user.username});
-    //   })
-    // ).subscribe(res => {
-    //   this.listArticles = res.articles;
-    //   this.newArticle = this.fb.group({
-    //     title: ["", Validators.required],
-    //     description: ["", Validators.required],
-    //     body: ["", Validators.required],
-    //     tag: ""
-    //   })
-    // })
     this.newArticle = this.fb.group({
-      title: ["", Validators.required],
-      description: ["", Validators.required],
-      body: ["", Validators.required],
-      tag: ""
-    })
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      body: ['', Validators.required],
+      tag: '',
+    });
   }
 
   createArticle() {
     let tagString = this.newArticle.controls['tag'].value;
-    let tagArr: string[] = tagString.split("#");
-    tagArr = tagArr.filter(item => item !== "");
-    
+    let tagArr: string[] = tagString.split('#');
+    tagArr = tagArr.filter((item) => item !== '');
+
     let body = {
       article: {
         title: this.newArticle.controls['title'].value,
@@ -58,13 +47,13 @@ export class EditArticleComponent implements OnInit {
       },
     };
     this.apiService.createArticle(body).subscribe({
-      next: res => {
+      next: (res) => {
         this.route.navigate(['/editor/article', res.article.slug]);
       },
-      error: error => {
+      error: (error) => {
         // console.log(error.error.errors.title[0]);
         this.errorTitle = error.error.errors.title[0];
-      }
-    })
+      },
+    });
   }
 }

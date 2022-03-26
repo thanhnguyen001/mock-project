@@ -1,3 +1,4 @@
+import { DeActiveProfile } from './../../guard/deActiveProfile.guard';
 import { ProfileComponent } from './profile/profile.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -10,11 +11,13 @@ const routes: Routes = [
   },
   {
     path: 'edit',
-    component: EditProfileComponent
+    component: EditProfileComponent,
+    canDeactivate: [DeActiveProfile],
   },
   {
-    path: ":username", component: ProfileComponent
-  }
+    path: ':username',
+    component: ProfileComponent,
+  },
 ];
 
 @NgModule({
