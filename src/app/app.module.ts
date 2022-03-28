@@ -9,9 +9,10 @@ import { FooterComponent } from './footer/footer.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutSideDirective } from './directives/click-out-side.directive';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, FooterComponent, ClickOutSideDirective],
+  declarations: [AppComponent, HeaderComponent, FooterComponent, ClickOutSideDirective, NotFoundComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

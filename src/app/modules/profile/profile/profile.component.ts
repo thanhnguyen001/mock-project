@@ -4,7 +4,8 @@ import { ApiClientService } from '../../../services/api-client.service';
 import { Article, Articles, Profile } from 'src/app/Models';
 import { ArticleService } from 'src/app/services/article.service';
 import { UserService } from '../../../services/user.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { images } from 'src/assets/images';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -28,11 +29,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public pages = new Array();
   public currentPage: number = 1;
   public isNothing: boolean = false;
+  public imgs: string[] = images;
   constructor(
     private apiClientService: ApiClientService,
     public articleService: ArticleService,
     public userService: UserService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.limit = this.articleService.limit;
     this.subject
@@ -61,6 +64,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
       })
     );
+  }
+
+  public handleChangeArticle(e: MouseEvent, slug: string, username: string) {
+    const ele = e.target as Element;
+    if (!ele.closest('.article-action') && !ele.closest('.article-user')) {
+      this.router.navigate(['/editor/article/', slug]);
+    }
+    if (ele.closest('.article-user')) {
+      this.router.navigate(['/profile/', `@${username}`]);
+    }
   }
 
   public getArticles(tab: string) {

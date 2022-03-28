@@ -57,7 +57,7 @@
         </div>
       </div>
       <ul class="nav nav-tabs nav-justified">
-        <li class="nav-item" style="cursor: pointer;">
+        <li class="nav-item" style="cursor: pointer">
           <span
             class="nav-link"
             (click)="getArticles('mine')"
@@ -65,7 +65,7 @@
             >My Articles</span
           >
         </li>
-        <li class="nav-item" style="cursor: pointer;">
+        <li class="nav-item" style="cursor: pointer">
           <span
             class="nav-link"
             (click)="getArticles('liked')"
@@ -88,14 +88,34 @@
         <div *ngIf="isNothing && !isLoading">Nothing here</div>
         <div *ngIf="!isLoading">
           <ul class="profile-article" *ngIf="articles">
-            <li class="w-100" *ngFor="let item of articles.articles">
-              <app-article-item [article]="item"></app-article-item>
+            <li
+              #articleItem
+              class="article-li position-relative"
+              (click)="
+                handleChangeArticle($event, item.slug, item.author.username)
+              "
+              *ngFor="let item of articles.articles; let i= index"
+            >
+              <div class="image-item">
+                <img [src]="i >= 7 ? imgs[i % 7] : imgs[i]" alt="">
+              </div>
+              <div class="article-item-wrap">
+                <app-article-item [article]="item"></app-article-item>
+              </div>
             </li>
           </ul>
 
           <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-end" style="cursor: pointer;" *ngIf="pages.length > 1">
-              <li *ngIf="currentPage > 1" class="page-item" (click)="handleChangePage(currentPage - 2)">
+            <ul
+              class="pagination justify-content-end"
+              style="cursor: pointer"
+              *ngIf="pages.length > 1"
+            >
+              <li
+                *ngIf="currentPage > 1"
+                class="page-item"
+                (click)="handleChangePage(currentPage - 2)"
+              >
                 <span class="page-link">Previous</span>
               </li>
               <li
@@ -106,7 +126,11 @@
               >
                 <span class="page-link">{{ i + 1 }}</span>
               </li>
-              <li *ngIf="currentPage < pages.length" class="page-item" (click)="handleChangePage(currentPage)">
+              <li
+                *ngIf="currentPage < pages.length"
+                class="page-item"
+                (click)="handleChangePage(currentPage)"
+              >
                 <span class="page-link">Next</span>
               </li>
             </ul>

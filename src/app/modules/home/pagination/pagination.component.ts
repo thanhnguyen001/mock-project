@@ -1,7 +1,8 @@
 import { Subscription } from 'rxjs';
 import { ArticleService } from './../../../services/article.service';
-import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
+import { Component, OnInit, DoCheck, OnDestroy, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Article, Articles } from 'src/app/Models';
 
 @Component({
   selector: 'app-pagination',
@@ -14,7 +15,7 @@ export class PaginationComponent implements OnInit, DoCheck, OnDestroy {
   public listPage: Array<number> = [];
   public Subscription = new Subscription();
   public currentPage: number = 1;
-
+  @Input() articleList!: Articles;
   constructor(
     public articleService: ArticleService,
     public route: ActivatedRoute,
@@ -31,6 +32,7 @@ export class PaginationComponent implements OnInit, DoCheck, OnDestroy {
     if (this.articleService.listArticle) {
       this.limit = this.articleService.limit;
       this.offset = this.articleService.offset;
+      this.currentPage = Math.ceil(this.offset / this.limit) + 1;
       if (this.articleService.listArticle.articlesCount > this.limit) {
         const maxPage: number = Math.ceil(
           this.articleService.listArticle.articlesCount / this.limit

@@ -8,7 +8,7 @@
   // Test CSS
 
   .username {
-    color: #16cc2e;
+    color: black;
   }
   .article-action {
     // position: absolute;
@@ -28,7 +28,7 @@
       transition: all 0.2s linear;
     }
     i.liked {
-      color: #41ee58;
+      color: #ec2525;
       // animation: flyOut 0.5s linear;
     }
     i.favorite {
@@ -78,10 +78,7 @@
 
 // Content
 .article-content {
-  // Test CSS
   text-align: center;
-  // Test CSS
-
   .article-description,
   .article-title {
     display: -webkit-box;
@@ -104,10 +101,13 @@
 
 //
 .read-more {
-  // Test CSS
   flex-direction: column-reverse;
   margin-top: 12px;
-  // Test CSS
+  position: absolute;
+  bottom: 12px;
+  left: 48%;
+  transform: translateX(-50%);
+  width: 100%;
 }
 .read-more-text {
   opacity: 0.7;
@@ -126,7 +126,7 @@
   border-radius: 26px;
   cursor: pointer;
   opacity: 0.7;
-  line-height: 24px;
+  line-height: 22px;
 }
 .tags-item:hover {
   background-color: rgba($color: #ccc, $alpha: 0.3);

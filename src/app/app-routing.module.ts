@@ -1,3 +1,4 @@
+import { NotFoundComponent } from './not-found/not-found.component';
 import { LoggedGuard } from './guard/logged.guard';
 import { AuthGuard } from './guard/auth.guard';
 import { NgModule } from '@angular/core';
@@ -16,13 +17,11 @@ const routes: Routes = [
   },
   {
     path: 'editor',
-    // canActivate: [AuthGuard],
     loadChildren: () =>
       import('./modules/editor/editor.module').then((m) => m.EditorModule),
   },
   {
     path: 'profile',
-    // canActivate: [AuthGuard],
     loadChildren: () =>
       import('./modules/profile/profile.module').then((m) => m.ProfileModule),
   },
@@ -32,6 +31,10 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/auth/auth.module').then((m) => m.AuthModule),
   },
+  {
+    path: "**",
+    component: NotFoundComponent
+  }
 ];
 
 @NgModule({

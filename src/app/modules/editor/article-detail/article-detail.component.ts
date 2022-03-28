@@ -11,10 +11,9 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-article-detail',
   templateUrl: './article-detail.component.html',
-  styleUrls: ['./article-detail.component.css']
+  styleUrls: ['./article-detail.component.css'],
 })
 export class ArticleDetailComponent implements OnInit, DoCheck {
-
   public articleDetail!: Article;
   public allComments!: Comments;
   public slug!: string;
@@ -34,107 +33,134 @@ export class ArticleDetailComponent implements OnInit, DoCheck {
     public userService: UserService,
     public fb: FormBuilder,
     public http: HttpClient
-    ) { }
+  ) {}
 
   ngOnInit() {
     this.textArea = this.fb.group({
-      cmt: ""
+      cmt: '',
     });
     this.login = this.authService.getToken();
-    this.router.params.pipe(
-      switchMap(res => {
-        this.slug = res['slug'];
-        return this.myService.getArticlesWithSlug(res['slug']);
-      })
-    )
-    .subscribe(res => {
-      this.articleDetail = res.article;
-      if(this.articleDetail && this.user) {
-        this.isAuthor = this.articleDetail.author.username === this.user.username;
-      }
-      // console.log(this.articleDetail);
-      this.favoriteCount = this.articleDetail.favoritesCount;
-      this.isFollow = this.articleDetail.author.following;
-      this.isFavorite = this.articleDetail.favorited;
-    })
-    this.myService.getCommentsFromArticle(this.slug).subscribe(res => {
+    this.router.params
+      .pipe(
+        switchMap((res) => {
+          this.slug = res['slug'];
+          return this.myService.getArticlesWithSlug(res['slug']);
+        })
+      )
+      .subscribe((res) => {
+        this.articleDetail = res.article;
+        if (this.articleDetail && this.user) {
+          this.isAuthor =
+            this.articleDetail.author.username === this.user.username;
+        }
+        // console.log(this.articleDetail);
+        this.favoriteCount = this.articleDetail.favoritesCount;
+        this.isFollow = this.articleDetail.author.following;
+        this.isFavorite = this.articleDetail.favorited;
+      });
+    this.myService.getCommentsFromArticle(this.slug).subscribe((res) => {
       this.allComments = res;
-    })
+    });
   }
 
   ngDoCheck() {
     if (!this.user) {
-      this.myService.getUser().subscribe(res => {
+      this.myService.getUser().subscribe((res) => {
         this.user = res.user;
-        if(this.articleDetail) {
-          this.isAuthor = this.articleDetail.author.username === this.user.username;
+        if (this.articleDetail) {
+          this.isAuthor =
+            this.articleDetail.author.username === this.user.username;
         }
-      })
-    }
-  }
-
-  followUser() {
-    this.isFollow = !this.isFollow;
-    if(!this.login) {
-      this.route.navigate(["/auth/sign-in"]);
-    } else {
-      this.myService.followUser(this.articleDetail.author.username).subscribe(res => {
       });
     }
   }
 
-  unFollowUser() {
+  checkLogin(): boolean {
+    const token: string | null = this.authService.getToken();
+    if (token) return true;
+    else {
+      const url = this.route.url;
+      this.authService.redirectUrl = url;
+      this.route.navigate(['/auth']);
+      return false;
+    }
+  }
+
+  followUser() {
+    if (!this.checkLogin()) return;
     this.isFollow = !this.isFollow;
-    this.myService.unfollowUser(this.articleDetail.author.username).subscribe(res => {
-    })
+    if (!this.login) {
+      this.route.navigate(['/auth/sign-in']);
+    } else {
+      this.myService
+        .followUser(this.articleDetail.author.username)
+        .subscribe((res) => {});
+    }
+  }
+
+  unFollowUser() {
+    if (!this.checkLogin()) return;
+    this.isFollow = !this.isFollow;
+    this.myService
+      .unfollowUser(this.articleDetail.author.username)
+      .subscribe((res) => {});
   }
 
   favorite() {
+    if (!this.checkLogin()) return;
     this.isFavorite = !this.isFavorite;
-    this.favoriteCount ++;
-    this.myService.favoriteArticle(this.slug).subscribe(res => {
+    this.favoriteCount++;
+    this.myService.favoriteArticle(this.slug).subscribe((res) => {
       console.log(res.article);
-
-    })
+    });
   }
 
   unFavorite() {
+    if (!this.checkLogin()) return;
     this.isFavorite = !this.isFavorite;
-    this.favoriteCount --;
-    this.myService.unfavoriteArticle(this.slug).subscribe(res => {
+    this.favoriteCount--;
+    this.myService.unfavoriteArticle(this.slug).subscribe((res) => {
       console.log(res);
-
-    })
+    });
   }
 
   postCmt() {
-    let cmtUser = {comment: {
-      body : this.textArea.controls['cmt'].value
-    }}
-    this.myService.addCommentsToArticle(this.slug, cmtUser).pipe(
-      switchMap(res => {
-        return this.myService.getCommentsFromArticle(this.slug);
-      })
-    ).subscribe(res => {
-      this.textArea.controls['cmt'].setValue("");
-      this.allComments = res;
-    })
+    let cmtUser = {
+      comment: {
+        body: this.textArea.controls['cmt'].value,
+      },
+    };
+    this.myService
+      .addCommentsToArticle(this.slug, cmtUser)
+      .pipe(
+        switchMap((res) => {
+          return this.myService.getCommentsFromArticle(this.slug);
+        })
+      )
+      .subscribe((res) => {
+        this.textArea.controls['cmt'].setValue('');
+        this.allComments = res;
+      });
   }
 
   delComment(id: Comment) {
-    this.allComments.comments = this.allComments.comments.filter(res => res.id !== id.id);
+    this.allComments.comments = this.allComments.comments.filter(
+      (res) => res.id !== id.id
+    );
     console.log(this.allComments);
-    
-    this.myService.deleteComment(this.slug, id.id).pipe(
-      switchMap(res => {
-        return this.myService.getCommentsFromArticle(this.slug);
-      })
-    ).subscribe();
+
+    this.myService
+      .deleteComment(this.slug, id.id)
+      .pipe(
+        switchMap((res) => {
+          return this.myService.getCommentsFromArticle(this.slug);
+        })
+      )
+      .subscribe();
   }
 
   delArticle() {
     this.myService.deleteArticle(this.slug).subscribe();
-    this.route.navigate(["/home"]);
+    this.route.navigate(['/home']);
   }
-
 }

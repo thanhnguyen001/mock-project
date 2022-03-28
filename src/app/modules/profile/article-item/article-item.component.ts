@@ -2,7 +2,14 @@ import { AuthService } from './../../../services/auth.service';
 import { Router } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { Article } from './../../../Models';
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { ApiClientService } from 'src/app/services/api-client.service';
 
 @Component({
@@ -13,12 +20,21 @@ import { ApiClientService } from 'src/app/services/api-client.service';
 export class ArticleItemComponent implements OnInit, OnDestroy {
   @Input() article!: Article;
   public isLiked: boolean = false;
+  public likedCount: number = 0;
   private subject = new Subject<boolean>();
-  constructor(private apiClient: ApiClientService, private router: Router, public authService: AuthService) {}
+  @ViewChild('liked') likeElement!: ElementRef;
+  @ViewChild('unLiked') unLikeElement!: ElementRef;
+  constructor(
+    private apiClient: ApiClientService,
+    private router: Router,
+    public authService: AuthService
+  ) {}
 
   ngOnInit() {
     if (this.article) {
       this.isLiked = this.article.favorited;
+      this.likedCount = this.article.favoritesCount;
+      this.article.tagList = this.article.tagList.filter(item => item !== "");
     }
 
     this.subject
@@ -26,7 +42,6 @@ export class ArticleItemComponent implements OnInit, OnDestroy {
         debounceTime(300),
         distinctUntilChanged(),
         switchMap((isLiked) => {
-          console.log(isLiked)
           if (isLiked)
             return this.apiClient.favoriteArticle(this.article.slug);
           else return this.apiClient.unfavoriteArticle(this.article.slug);
@@ -43,11 +58,46 @@ export class ArticleItemComponent implements OnInit, OnDestroy {
       return;
     }
     this.isLiked = !this.isLiked;
+    if (this.isLiked) {
+      this.likedCount++;
+    } else {
+      this.likedCount--;
+    }
+    this.animation();
     this.subject.next(this.isLiked);
   }
 
-  public handleRoute(username: string) {
-    return `/profile/@${username}`;
+  public animation() {
+    if (this.isLiked) {
+      this.likeElement.nativeElement.classList.add('liked');
+    } else {
+      this.likeElement.nativeElement.animate(
+        [
+          {
+            opacity: 1,
+            transform: 'transLateY(-10px)',
+          },
+          {
+            opacity: 0.7,
+            transform: 'transLateY(-25px)',
+          },
+          {
+            opacity: 0,
+            transform: 'transLateY(-40px)',
+          },
+        ],
+        {
+          // timing options
+          duration: 500,
+          easing: 'linear',
+        }
+      );
+      const id = setTimeout(() => {
+        this.likeElement.nativeElement.classList.remove('liked');
+        clearTimeout(id);
+      }, 500);
+
+    }
   }
 
   ngOnDestroy(): void {

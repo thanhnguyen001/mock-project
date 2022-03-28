@@ -29,15 +29,20 @@
       <ul #listArticle *ngIf="articles">
         <li
           #articleItem
-          class="article-li"
+          class="article-li position-relative"
           (click)="handleChangeArticle($event, item.slug, item.author.username)"
-          *ngFor="let item of articles.articles"
+          *ngFor="let item of articles.articles; let i=index"
         >
+        <div class="image-item">
+          <img [src]="i >= 7 ? imgs[i % 7] : imgs[i]" alt="">
+        </div>
+        <div class="article-item-wrap">
           <app-article-item [article]="item"></app-article-item>
+        </div>
         </li>
       </ul>
     </div>
   </div>
 </div>
 
-<app-pagination *ngIf="!isPending"></app-pagination>
+<app-pagination *ngIf="!isPending" [articleList]="articles"></app-pagination>

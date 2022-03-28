@@ -48,7 +48,14 @@ export class SigninComponent implements OnInit, OnDestroy {
         next: (res: { user: User }) => {
             this.isLoading = false
             this.formLogin.reset();
-            this.route.navigate(['home']);
+            const url = this.auth.redirectUrl;
+            if (url) {
+              this.auth.redirectUrl = '';
+              this.route.navigate([url]);
+            }
+            else {
+              this.route.navigate(['home']);
+            }
         },
         error: (err) => {
           this.isLoading = false

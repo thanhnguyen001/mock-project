@@ -4,9 +4,10 @@ import { UserService } from './../../../services/user.service';
 import { AuthService } from './../../../services/auth.service';
 import { Articles, Article } from './../../../Models';
 import { Subscription } from 'rxjs';
-import { Component, OnDestroy, OnInit, DoCheck } from '@angular/core';
+import { Component, OnDestroy, OnInit, DoCheck, ViewEncapsulation } from '@angular/core';
 import { ApiClientService } from 'src/app/services/api-client.service';
 import { Router } from '@angular/router';
+import { images } from 'src/assets/images';
 
 @Component({
   selector: 'app-article',
@@ -22,6 +23,7 @@ export class ArticleComponent implements OnInit, OnDestroy, DoCheck {
   public isPending: boolean = true;
   public offset: number = 0;
   public isNothing: boolean = false;
+  public imgs: string[] = images;
 
   constructor(
     private apiClient: ApiClientService,
@@ -65,9 +67,15 @@ export class ArticleComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   public handleActiveTab(t: string) {
+    if (t !== this.tag) {
+      this.offset = 0;
+      this.articleService.offset = 0;
+    }
     this.tag = t;
     if (t !== 'Your Feeds' && t !== 'Global') this.tagService.tag = t;
-    else this.tagService.tag = '';
+    else {
+      this.tagService.tag = '';
+    }
     this.isPending = true;
     if (this.tag === 'Global') {
       this.getArticleGlobal();
@@ -93,14 +101,11 @@ export class ArticleComponent implements OnInit, OnDestroy, DoCheck {
           const newArticles: Article[] = res.articles.filter(
             (item) => item.author.username === this.userService.user?.username
           );
-          if (newArticles.length <= 0) {
-            this.articles = { ...res };
-          } else {
-            this.articles = {
-              articles: newArticles,
-              articlesCount: res.articlesCount,
-            };
-          }
+
+          this.articles = {
+            articles: newArticles,
+            articlesCount: res.articlesCount - 3,
+          };
         } else this.articles = { ...res };
         this.isPending = false;
         this.updatePagination();
