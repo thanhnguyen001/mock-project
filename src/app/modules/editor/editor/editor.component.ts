@@ -23,6 +23,7 @@ export class EditorComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+
     this.newArticle = this.fb.group({
       title: ["", Validators.required],
       description: ["", Validators.required],

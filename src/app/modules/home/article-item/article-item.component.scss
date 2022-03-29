@@ -131,3 +131,9 @@
 .tags-item:hover {
   background-color: rgba($color: #ccc, $alpha: 0.3);
 }
+
+@media screen and (max-width: 525px) {
+  .read-more {
+    display: none !important;
+  }
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { User } from '../../../Models';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import {
   FormBuilder,
   FormControl,
@@ -40,7 +40,8 @@ export class EditProfileComponent implements OnInit, DoCheck, OnDestroy {
   constructor(
     public userService: UserService,
     private fb: FormBuilder,
-    public route: Router,
+    public router: Router,
+    public activeRoute: ActivatedRoute,
     public apiClient: ApiClientService,
     public auth: AuthService
   ) {}
@@ -62,6 +63,11 @@ export class EditProfileComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (!this.auth.getToken()) {
+      this.auth.redirectUrl = this.router.url;
+      this.router.navigate(['/auth']);
+      return;
+    }
     this.setUser();
 
     this.email.valueChanges.subscribe((value) => {
@@ -116,7 +122,7 @@ export class EditProfileComponent implements OnInit, DoCheck, OnDestroy {
         next: (res: { user: User }) => {
           // this.updateProfile.reset();
           const url: string = `/profile/@${this.user.username}`
-          this.route.navigate([url]);
+          this.router.navigate([url]);
         },
         error: (err) => {
           if (err.error.includes('username')) {
@@ -133,7 +139,10 @@ export class EditProfileComponent implements OnInit, DoCheck, OnDestroy {
   }
   public handleLogout() {
     this.auth.logOut();
-    this.route.navigate(['/home']);
+    const id = setTimeout(() => {
+      this.router.navigate(['/home']);
+      clearTimeout(id);
+    }, 200)
   }
 
   ngOnDestroy(): void {

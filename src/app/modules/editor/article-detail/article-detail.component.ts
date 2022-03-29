@@ -36,10 +36,11 @@ export class ArticleDetailComponent implements OnInit, DoCheck {
   ) {}
 
   ngOnInit() {
+    this.user = this.userService.user;
+    this.login = this.authService.getToken();
     this.textArea = this.fb.group({
       cmt: '',
     });
-    this.login = this.authService.getToken();
     this.router.params
       .pipe(
         switchMap((res) => {
@@ -64,7 +65,9 @@ export class ArticleDetailComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck() {
-    if (!this.user) {
+    if (this.authService.getToken()) {
+      this.login = this.authService.getToken();
+      this.user = this.userService.user;
       this.myService.getUser().subscribe((res) => {
         this.user = res.user;
         if (this.articleDetail) {

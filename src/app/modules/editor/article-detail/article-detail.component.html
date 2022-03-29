@@ -24,7 +24,7 @@
                 Edit Article
               </span>
             </button>
-          </div>       
+          </div>
           <div class="mt-2 me-2">
             <button class="btn border-danger btn-outline-danger" (click)="delArticle()">
               <i class="fa-solid fa-trash-can"></i>
@@ -32,7 +32,7 @@
                 Delete Article
               </span>
             </button>
-          </div>       
+          </div>
         </div>
       </div>
       <ng-template #notAuthor>
@@ -44,7 +44,7 @@
                 Follow {{ articleDetail.author.username }}
               </span>
             </button>
-          </div>       
+          </div>
         </div>
         <ng-template #noFollow>
           <div class="mt-2 me-2">
@@ -54,7 +54,7 @@
                 Unfollow {{ articleDetail.author.username }}
               </span>
             </button>
-          </div> 
+          </div>
         </ng-template>
         <div class="mt-2">
           <div *ngIf="!login || (!isFavorite && login); else noFavorite">
@@ -75,7 +75,7 @@
               </span>
             </button>
           </ng-template>
-        </div>       
+        </div>
       </ng-template>
     </div>
   </div>
@@ -107,13 +107,13 @@
                 <i class="fa-solid fa-pen"></i>
                 Edit Article
               </button>
-            </div>       
+            </div>
             <div class="mt-2 me-2">
               <button class="btn border-danger btn-outline-danger" (click)="delArticle()">
                 <i class="fa-solid fa-trash-can"></i>
                 Delete Article
               </button>
-            </div>       
+            </div>
           </div>
         </div>
         <ng-template #notAuthor>
@@ -123,7 +123,7 @@
                 <i class="fa-solid fa-plus"></i>
                 Follow {{ articleDetail.author.username }}
               </button>
-            </div>       
+            </div>
           </div>
           <ng-template #noFollow>
             <div class="mt-2 me-2">
@@ -131,7 +131,7 @@
                 <i class="fa-solid fa-minus"></i>
                 Unfollow {{ articleDetail.author.username }}
               </button>
-            </div> 
+            </div>
           </ng-template>
           <div class="mt-2">
             <div *ngIf="!login || (!isFavorite && login); else noFavorite">
@@ -146,14 +146,14 @@
                 Unfavorite Article ({{ favoriteCount }})
               </button>
             </ng-template>
-          </div>       
+          </div>
         </ng-template>
       </div>
     </div>
     <div *ngIf="!login">
-      <a routerLink="/auth/sign-in" style="text-decoration: none; color: #198754;" class="fw-bold">Sign in</a> or <a routerLink="/auth/sign-up" style="text-decoration: none; color: #198754;" class="fw-bold">sign up</a> to add comments on this article.
+      <span (click)="checkLogin()" style="text-decoration: none; color: #198754;" class="fw-bold">Sign in</span> or <span (click)="checkLogin()" style="text-decoration: none; color: #198754;" class="fw-bold">sign up</span> to add comments on this article.
     </div>
-    <div *ngIf="login && user">
+    <div *ngIf="login">
       <div class="card">
         <form [formGroup]="textArea" class="form-group">
           <textarea name="" formControlName="cmt" rows="4" class="form-control" cols="12">
