@@ -142,7 +142,7 @@ export class EditProfileComponent implements OnInit, DoCheck, OnDestroy {
     const id = setTimeout(() => {
       this.router.navigate(['/home']);
       clearTimeout(id);
-    }, 200)
+    }, 300)
   }
 
   ngOnDestroy(): void {

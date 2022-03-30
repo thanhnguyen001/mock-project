@@ -36,7 +36,6 @@ export class ArticleDetailComponent implements OnInit, DoCheck {
   ) {}
 
   ngOnInit() {
-    this.checkLogin();
 
     this.user = this.userService.user;
     this.login = this.authService.getToken();
