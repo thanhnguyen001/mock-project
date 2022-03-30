@@ -63,8 +63,9 @@ export class SignupComponent implements OnInit, OnDestroy {
         error: (err) => {
           this.isLoading = false
           this.hasError = true;
-          this.error.username = err.errors.username;
-          this.error.email = err.errors.email;
+          console.log(err)
+          this.error.username = err.errors?.username[0];
+          this.error.email = err.errors?.email[0];
         },
       })
     );

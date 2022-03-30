@@ -4,7 +4,9 @@
       <h1 class="caret-color">Sign Up</h1>
     </div>
     <div *ngIf="hasError" class="alert alert-danger m-30">
-       Email is unique!
+      <span *ngIf="error.email">
+       Email {{error.email}}
+      </span>
       <br>
       <span *ngIf="error.username">
        Username {{error.username}}

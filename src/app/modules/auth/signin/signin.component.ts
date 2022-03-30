@@ -60,7 +60,7 @@ export class SigninComponent implements OnInit, OnDestroy {
         error: (err) => {
           this.isLoading = false
           this.hasError = true;
-          this.error.message = err.errors['email or password'];
+          this.error.message = err.errors?.['email or password'];
         },
       })
     );
