@@ -4,9 +4,7 @@
       <h1 class="caret-color">Sign In</h1>
     </div>
     <div *ngIf="hasError" class="alert alert-danger m-30">
-      <span *ngIf="error.message">
         email or password {{error.message}}
-      </span>
     </div>
     <form (ngSubmit)="onSubmit()" [formGroup]="formLogin">
       <input
