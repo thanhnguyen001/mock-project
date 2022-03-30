@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiClientService } from 'src/app/services/api-client.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-editor',
@@ -19,7 +20,8 @@ export class EditorComponent implements OnInit {
     public router: ActivatedRoute,
     public fb: FormBuilder,
     public apiService: ApiClientService,
-    public route: Router
+    public route: Router,
+    public authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -53,7 +55,19 @@ export class EditorComponent implements OnInit {
       });
   }
 
+  checkLogin(): boolean {
+    const token: string | null = this.authService.getToken();
+    if (token) return true;
+    else {
+      const url = this.route.url;
+      this.authService.redirectUrl = url;
+      this.route.navigate(['/auth']);
+      return false;
+    }
+  }
+
   updateArticle() {
+    if (!this.checkLogin()) return;
     let tagString = this.newArticle.controls['tag'].value;
     let tagArr: string[] = tagString.split("#");
     tagArr = tagArr.filter(item => item !== "");

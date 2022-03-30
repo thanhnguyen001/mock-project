@@ -5,6 +5,7 @@ import { ApiClientService } from 'src/app/services/api-client.service';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { switchMap } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-edit-article',
@@ -21,7 +22,8 @@ export class EditArticleComponent implements OnInit {
     public apiService: ApiClientService,
     public route: Router,
     public userService: UserService,
-    public dialogService: DialogService
+    public dialogService: DialogService,
+    public authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -33,7 +35,19 @@ export class EditArticleComponent implements OnInit {
     });
   }
 
+  checkLogin(): boolean {
+    const token: string | null = this.authService.getToken();
+    if (token) return true;
+    else {
+      const url = this.route.url;
+      this.authService.redirectUrl = url;
+      this.route.navigate(['/auth']);
+      return false;
+    }
+  }
+
   createArticle() {
+    if (!this.checkLogin()) return;
     let tagString = this.newArticle.controls['tag'].value;
     let tagArr: string[] = tagString.split('#');
     tagArr = tagArr.filter((item) => item !== '');
