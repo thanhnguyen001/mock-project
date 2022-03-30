@@ -46,14 +46,14 @@ export class ApiClientService {
     const url: string = `${this.BASE_API}/users/login`;
     return this.http
       .post<{ user: User }>(url, body, this.options)
-      .pipe(catchError(this.handleError));
+      // .pipe(catchError(this.handleError));
   }
 
   public registerUser(body: RegisterUserBody) {
     const url: string = `${this.BASE_API}/users`;
     return this.http
       .post<{ user: User }>(url, body, this.options)
-      .pipe(catchError(this.handleError));
+      // .pipe(catchError(this.handleError));
   }
 
   public updateUser(body: UpdateUser) {
@@ -65,7 +65,7 @@ export class ApiClientService {
     const url: string = `${this.BASE_API}/user`;
     return this.http
       .get<{ user: User }>(url, this.options)
-      .pipe(catchError(this.handleError));
+      // .pipe(catchError(this.handleError));
   }
 
   //Profile
@@ -73,21 +73,21 @@ export class ApiClientService {
     const url: string = `${this.BASE_API}/profiles/${username}`;
     return this.http
       .get<{ profile: Profile }>(url, this.options)
-      .pipe(catchError(this.handleError));
+      // .pipe(catchError(this.handleError));
   }
 
   public followUser(username: string) {
     const url: string = `${this.BASE_API}/profiles/${username}/follow`;
     return this.http
       .post<{ profile: Profile }>(url, {}, this.options)
-      .pipe(catchError(this.handleError));
+      // .pipe(catchError(this.handleError));
   }
 
   public unfollowUser(username: string) {
     const url: string = `${this.BASE_API}/profiles/${username}/follow`;
     return this.http
       .delete<{ profile: Profile }>(url, this.options)
-      .pipe(catchError(this.handleError));
+      // .pipe(catchError(this.handleError));
   }
 
   // Articles
@@ -107,21 +107,21 @@ export class ApiClientService {
     if (params.favorited) url += `&favorited=${params.favorited}`;
     return this.http
       .get<Articles>(url, this.options)
-      .pipe(catchError(this.handleError));
+      // .pipe(catchError(this.handleError));
   }
 
   public getFeedArticles() {
     const url: string = `${this.BASE_API}/articles/feed`;
     return this.http
       .get<Articles>(url, this.options)
-      .pipe(catchError(this.handleError));
+      // .pipe(catchError(this.handleError));
   }
 
   public getArticlesWithSlug(slug: string) {
     const url: string = `${this.BASE_API}/articles/${slug}`;
     return this.http
       .get<{ article: Article }>(url, this.options)
-      .pipe(catchError(this.handleError));
+      // .pipe(catchError(this.handleError));
   }
 
   public createArticle(body: CreateArticle) {
@@ -133,7 +133,7 @@ export class ApiClientService {
     const url: string = `${this.BASE_API}/articles/${slug}`;
     return this.http
       .put<{ article: Article }>(url, body, this.options)
-      
+
   }
 
   public deleteArticle(slug: string) {
@@ -146,14 +146,14 @@ export class ApiClientService {
     const url: string = `${this.BASE_API}/articles/${slug}/comments`;
     return this.http
       .post<Comment>(url, body, this.options)
-      .pipe(catchError(this.handleError));
+      // .pipe(catchError(this.handleError));
   }
 
   public getCommentsFromArticle(slug: string) {
     const url: string = `${this.BASE_API}/articles/${slug}/comments`;
     return this.http
       .get<{ comments: Comment[] }>(url, this.options)
-      .pipe(catchError(this.handleError));
+      // .pipe(catchError(this.handleError));
   }
 
   public deleteComment(slug: string, id: string | number) {
@@ -165,7 +165,7 @@ export class ApiClientService {
     const url: string = `${this.BASE_API}/articles/${slug}/favorite`;
     return this.http
       .post<{ article: Article }>(url, {}, this.options)
-      .pipe(catchError(this.handleError));
+      // .pipe(catchError(this.handleError));
   }
 
   public unfavoriteArticle(slug: string) {
@@ -178,7 +178,7 @@ export class ApiClientService {
     const url: string = `${this.BASE_API}/tags`;
     return this.http
       .get<{ tags: string[] }>(url)
-      .pipe(catchError(this.handleError));
+      // .pipe(catchError(this.handleError));
   }
 
   // DELETE
@@ -191,7 +191,7 @@ export class ApiClientService {
     };
     return this.httpIgnore
       .delete(url, options)
-      .pipe(catchError(this.handleError));
+      // .pipe(catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse) {
